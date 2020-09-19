@@ -5,6 +5,7 @@ import com.jvvladimir.spring.jdbc.model.Address
 import com.jvvladimir.spring.jdbc.model.Customer
 import com.jvvladimir.spring.jdbc.model.Gender
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -12,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Example
 import org.springframework.test.context.ContextConfiguration
-
-
 
 /**
  * @see DataJdbcTest поднимает in-memory БД, если таковая предоставлена (указывается в build.gradle.kts)
@@ -25,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration
  * Непонятно, почему нельзя использовать внешние ключи (как будто SQL нам больше не нужен!!)
  * Отношение многие-ко-многим делается целиком руками
  *
- * Попробовать RawMapper
+ *
  * */
 
 @DataJdbcTest
@@ -118,7 +117,19 @@ class CustomerRepositoryTest {
             it.name = "Vova"
         })
 
+        assertThat(repository.findById(customer.id!!).isEmpty).isFalse
+
         repository.deleteCustomer(customer.id!!)
         assertThat(repository.findById(customer.id!!).isEmpty).isTrue
+    }
+
+    @Test
+    fun `test cache`() {
+        val customer = repository.save(Customer().also {
+            it.name = "Vova"
+        })
+        repository.findById(customer.id!!)
+        repository.findById(customer.id!!)
+        repository.findById(customer.id!!)
     }
 }

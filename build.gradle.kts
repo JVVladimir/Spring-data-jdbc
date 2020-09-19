@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(kotlin("stdlib"))
     implementation("io.github.microutils:kotlin-logging:1.11.0")

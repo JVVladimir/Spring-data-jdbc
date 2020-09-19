@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 data class Address (
 
     @Id
-    var id: Long? = null,
+    var customer: Long? = null,
     var city: String? = null,
     var street: String? = null,
     var house: Int? = null
