@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component
 class SimpleCacheCustomizer : CacheManagerCustomizer<ConcurrentMapCacheManager> {
 
     override fun customize(cacheManager: ConcurrentMapCacheManager) {
-        cacheManager.setCacheNames(listOf("customers", "addresses"))
+        cacheManager.setCacheNames(listOf("customers"))
     }
 }

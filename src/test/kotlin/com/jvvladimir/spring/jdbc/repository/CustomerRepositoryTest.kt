@@ -5,13 +5,12 @@ import com.jvvladimir.spring.jdbc.model.Address
 import com.jvvladimir.spring.jdbc.model.Customer
 import com.jvvladimir.spring.jdbc.model.Gender
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.Example
 import org.springframework.test.context.ContextConfiguration
 
 /**
@@ -37,12 +36,18 @@ class CustomerRepositoryTest {
     @Value("\${owner.name}")
     private lateinit var ownerName: String
 
-    @Test
-    fun `test custom repository`() {
-        val customer = Customer().also {
+    private lateinit var customer: Customer
+
+    @BeforeEach
+    fun fillCustomers() {
+        customer = Customer().also {
             it.name = "Vova"
             it.gender = Gender.MALE
         }
+    }
+
+    @Test
+    fun `test custom repository`() {
         val savedCustomer = repository.save(customer)
 
         assertThat(savedCustomer).isNotNull
@@ -51,10 +56,6 @@ class CustomerRepositoryTest {
 
     @Test
     fun `test clone entity`() {
-        val customer = Customer().also {
-            it.name = "Vova"
-            it.gender = Gender.MALE
-        }
         val savedCustomer = repository.save(customer)
 
         assertThat(savedCustomer).isNotNull
@@ -89,10 +90,6 @@ class CustomerRepositoryTest {
 
     @Test
     fun `test audition entity`() {
-        val customer = Customer().also {
-            it.name = "Vova"
-            it.gender = Gender.MALE
-        }
         val savedCustomer = repository.save(customer)
 
         assertThat(savedCustomer).isNotNull
@@ -113,23 +110,11 @@ class CustomerRepositoryTest {
 
     @Test
     fun `test delete customer query`() {
-        val customer = repository.save(Customer().also {
-            it.name = "Vova"
-        })
+        val savedCustomer = repository.save(customer)
 
-        assertThat(repository.findById(customer.id!!).isEmpty).isFalse
+        assertThat(repository.findById(savedCustomer.id!!).isEmpty).isFalse
 
-        repository.deleteCustomer(customer.id!!)
-        assertThat(repository.findById(customer.id!!).isEmpty).isTrue
-    }
-
-    @Test
-    fun `test cache`() {
-        val customer = repository.save(Customer().also {
-            it.name = "Vova"
-        })
-        repository.findById(customer.id!!)
-        repository.findById(customer.id!!)
-        repository.findById(customer.id!!)
+        repository.deleteCustomer(savedCustomer.id!!)
+        assertThat(repository.findById(savedCustomer.id!!).isEmpty).isTrue
     }
 }

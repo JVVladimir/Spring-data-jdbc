@@ -18,7 +18,4 @@ interface CustomerRepository: CrudRepository<Customer, Long> {
     @Query("delete from customer where id = :id")
     @Modifying
     fun deleteCustomer(@Param("id") id: Long)
-
-//    @Cacheable("customers")
-//    override fun findById(id: Long): Optional<Customer>
 }
