@@ -36,14 +36,9 @@ class CustomerRepositoryTest {
     @Value("\${owner.name}")
     private lateinit var ownerName: String
 
-    private lateinit var customer: Customer
-
-    @BeforeEach
-    fun fillCustomers() {
-        customer = Customer().also {
-            it.name = "Vova"
-            it.gender = Gender.MALE
-        }
+    private val customer: Customer = Customer().also {
+        it.name = "Vova"
+        it.gender = Gender.MALE
     }
 
     @Test

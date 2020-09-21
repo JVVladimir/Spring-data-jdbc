@@ -19,6 +19,8 @@ import org.springframework.test.context.ContextConfiguration
  * DataJdbcTest - по-умолчанию поднимает бины, связанные только с JDBC и DB, кэширования нет.
  * Нужно руками указывать, какой CacheManager поднять или использовать вместо DataJdbcTest
  * SpringBootTest, который поднимет весь контекст, в том числе и CacheManager.
+ *
+ * В качестве Key для кэша принимаются параметры поступающие в функцию, при этом кэшируется возвращаемое значение.
  * */
 
 @DataJdbcTest
@@ -56,10 +58,6 @@ class CacheCustomerServiceTest {
     fun `test saving operation in cache`() {
         val customer = customerService.save(customer)
         assertThat(cacheManager.getCache(CACHE_NAME)!![customer.id!!]).isNotNull
-
-        // customerService.findById(customer.id!!)
-
-        // assertThat(cacheManager.getCache(CACHE_NAME)!![customer.id!!]).isNotNull
     }
 
     @Test
@@ -67,10 +65,7 @@ class CacheCustomerServiceTest {
         val customer = customerService.save(customer)
         assertThat(cacheManager.getCache(CACHE_NAME)!![customer.id!!]).isNotNull
 
-        repeat(3) {
-            customerService.findById(customer.id!!)
-        }
-
-        assertThat(cacheManager.getCache(CACHE_NAME)!![customer.id!!]).isNotNull
+        customerService.delete(customer)
+        assertThat(cacheManager.getCache(CACHE_NAME)!![customer.id!!] == null)
     }
 }

@@ -15,7 +15,7 @@ class CustomerServiceImpl(
     @Cacheable("customers")
     override fun findById(id: Long): Customer? = customerRepository.findById(id).orElse(null)
 
-    @CachePut("customers")
+    @CachePut("customers", key = "#customer.id")
     override fun save(customer: Customer) = customerRepository.save(customer)
 
     @CacheEvict("customers")
