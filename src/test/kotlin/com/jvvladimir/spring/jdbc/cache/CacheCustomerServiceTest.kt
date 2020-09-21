@@ -14,7 +14,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.test.context.ContextConfiguration
 
 /**
- * Как SpringBootTest поднимает БД (какую?)?
  *
  * DataJdbcTest - по-умолчанию поднимает бины, связанные только с JDBC и DB, кэширования нет.
  * Нужно руками указывать, какой CacheManager поднять или использовать вместо DataJdbcTest
